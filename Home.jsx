@@ -1,23 +1,19 @@
 import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import NewsItem from "./NewsItem";
-import { useLocation } from "react-router-dom";
 
-export default function Home() {
+export default function Home(props) {
   let [articles, setArticles] = useState([]);
   let [totalResults, setTotalResults] = useState(0);
   let [page, setPage] = useState(1);
-
-  let search = useLocation().search;
-  let query = new URLSearchParams(search);
-
-  let [q, setQ] = useState("All");
-  let [language, setLanguage] = useState("hi");
-
-  async function getAPIData(q, language) {
-    setPage(1);
+  async function getAPIData() {
+    setPage(1)
     let response = await fetch(
-      `https://newsapi.org/v2/everything?q=${q}&language=${language}&pageSize=18&page=${page})&sortBy=publishedAt&apiKey=d090b6804c1444e492bd9ea6bee948de`
+      `https://newsapi.org/v2/everything?q=${
+        props.search ? props.search : props.q
+      }&language=${
+        props.language
+      }&pageSize=18&page=${page})&sortBy=publishedAt&apiKey=d090b6804c1444e492bd9ea6bee948de`
     );
     response = await response.json();
     if (response.status === "ok") {
@@ -29,7 +25,11 @@ export default function Home() {
   let fetchData = async () => {
     setPage(page + 1);
     let response = await fetch(
-      `https://newsapi.org/v2/everything?q=${q}&language=${language}&pageSize=18&page=${page})&sortBy=publishedAt&apiKey=d090b6804c1444e492bd9ea6bee948de`
+      `https://newsapi.org/v2/everything?q=${
+        props.search ? props.search : props.q
+      }&language=${
+        props.language
+      }&pageSize=18&page=${page})&sortBy=publishedAt&apiKey=d090b6804c1444e492bd9ea6bee948de`
     );
     response = await response.json();
     if (response?.status === "ok")
@@ -41,15 +41,13 @@ export default function Home() {
   };
 
   useEffect(() => {
-    setQ(query.get("q") ?? "All");
-    setLanguage(query.get("language") ?? "hi");
-    getAPIData(query.get("q") ?? "All", query.get("language") ?? "hi");
-  }, [search]);
+    getAPIData()
+  }, [props])
 
   return (
     <div className="container-flud">
       <h3 className="background text-light text-center p-3 mt-2 text-capitalize">
-        {q} Articles
+        {props.search ? props.search : props.q} Articles
       </h3>
       <InfiniteScroll
         dataLength={articles?.length} //This is important field to render the next data
@@ -57,8 +55,8 @@ export default function Home() {
         hasMore={articles?.length < totalResults}
         loader={
           <div className="text-center my-1">
-            <div className="spinner-border" role="status">
-              <span className="visually-hidden">Loading...</span>
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
             </div>
           </div>
         }

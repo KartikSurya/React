@@ -1,189 +1,228 @@
-import React, { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
 
-export default function Navbar() {
-  let [search, setSearch] = useState("");
-  let [q,setQ]=useState("All")
-  let [language,setLanguage]=useState("hi")
+export default function Navbar(props){
+  let [search, setSearch]=useState("")
 
-  let navigate=useNavigate()
-
-  let searchParams=useLocation().search
-  let query=new URLSearchParams(searchParams)
-
-  function postSearch(e) {
-    e.preventDefault();
-    navigate(`/?q=${search}&language=${language}`)
-    setSearch("");
+  function postSearch(e){
+    e.preventDefault()
+    props.changeSearch(search)
+    setSearch("")
   }
 
-  useEffect(()=>{
-    setQ(query.get("q")??"All")
-    setLanguage(query.get("language")??"hi")
-  },[query])
-
-  return (
-    <div>
-      <nav className="navbar navbar-expand-lg bg-body-tertiary background sticky-top">
-        <div className="container-fluid">
-          <Link className="navbar-brand text-light" to={`/language=${language}`}>
-            NewsApp
-          </Link>
-          <button
-            className="navbar-toggler text-light"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="material-symbols-outlined">menu</span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item">
-                <Link
-                  className="nav-link text-light"
-                  aria-current="page"
-                  to={`/?q=All&language=${language}`}
-                >
-                  All
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  className="nav-link text-light"
-                  aria-current="page"
-                  to={`/?q=Politics&language=${language}`}
-                >
-                  Politics
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  className="nav-link text-light"
-                  aria-current="page"
-                  to={`/?q=Crime&language=${language}`}
-                >
-                  Crime
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  className="nav-link text-light"
-                  aria-current="page"
-                  to={`/?q=Science&language=${language}`}
-                >
-                  Science
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  className="nav-link text-light"
-                  aria-current="page"
-                  to={`/?q=Technology&language=${language}`}
-                >
-                  Technology
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  className="nav-link text-light"
-                  aria-current="page"
-                  to={`/?q=Entertainment&language=${language}`}
-                >
-                  Entertainment
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link  text-light" to={`/?q=Sports&language=${language}`}>
-                  Sports
-                </Link>
-              </li>
-              <li className="nav-item dropdown">
-                <Link
-                  className="nav-link dropdown-toggle text-light"
-                  to={`/&language=${language}`}
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Others
-                </Link>
-                <ul className="dropdown-menu">
-                  <li>
-                    <Link className="dropdown-item" to={`/?q=Cricket&language=${language}`}>
-                      Cricket
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="dropdown-item" to={`/?q=IPL&language=${language}`}>
-                      IPL
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="dropdown-item" to={`/?q=Jokes&language=${language}`}>
-                      Jokes
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="dropdown-item" to={`/?q=Economics&language=${language}`}>
-                      Economics
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="dropdown-item" to={`/?q=India&language=${language}`}>
-                      India
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="dropdown-item" to={`/?q=International&language=${language}`}>
-                      International
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-              <li className="nav-item dropdown">
-                <Link
-                  className="nav-link dropdown-toggle text-light"
-                  to="/?q=language"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Language
-                </Link>
-                <ul className="dropdown-menu">
-                  <li>
-                    <Link className="dropdown-item" to={`/?q=${q}&language=hi`}>Hindi</Link>
-                  </li>
-                  <li>
-                    <Link className="dropdown-item" to={`/?q=${q}&language=en`}>English</Link>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-            <form
-              className="d-flex"
-              role="search"
-              onSubmit={(e) => postSearch(e)}
+    return (
+      <div>
+        <nav className="navbar navbar-expand-lg bg-body-tertiary background sticky-top">
+          <div className="container-fluid">
+            <NavLink
+              className="navbar-brand text-light"
+              to="/"
+              onClick={() => props.changeSearch("")}
             >
-              <input
-                className="form-control me-2"
-                name="search"
-                type="search"
-                placeholder="Search"
-                aria-label="Search"
-                onChange={(e) => setSearch(e.target.value)}
-              />
-              <button className="btn btn-outline-light" type="submit">
-                Search
-              </button>
-            </form>
+              NewsApp
+            </NavLink>
+            <button
+              className="navbar-toggler text-light"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span className="material-symbols-outlined">menu</span>
+            </button>
+            <div
+              className="collapse navbar-collapse"
+              id="navbarSupportedContent"
+            >
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link text-light"
+                    aria-current="page"
+                    to="/All"
+                    onClick={() => props.changeSearch("")}
+                  >
+                    All
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link text-light"
+                    aria-current="page"
+                    to="/Politics"
+                    onClick={() => props.changeSearch("")}
+                  >
+                    Politics
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link text-light"
+                    aria-current="page"
+                    to="/Crime"
+                    onClick={() => props.changeSearch("")}
+                  >
+                    Crime
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link text-light"
+                    aria-current="page"
+                    to="/Science"
+                    onClick={() => props.changeSearch("")}
+                  >
+                    Science
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link text-light"
+                    aria-current="page"
+                    to="/Technology"
+                    onClick={() => props.changeSearch("")}
+                  >
+                    Technology
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link text-light"
+                    aria-current="page"
+                    to="/Entertainment"
+                    onClick={() => props.changeSearch("")}
+                  >
+                    Entertainment
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link  text-light"
+                    to="/Sports"
+                    onClick={() => props.changeSearch("")}
+                  >
+                    Sports
+                  </NavLink>
+                </li>
+                <li className="nav-item dropdown">
+                  <NavLink
+                    className="nav-link dropdown-toggle text-light"
+                    to="/Others"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    Others
+                  </NavLink>
+                  <ul className="dropdown-menu">
+                    <li>
+                      <NavLink
+                        className="dropdown-item"
+                        to="/Cricket"
+                        onClick={() => props.changeSearch("")}
+                      >
+                        Cricket
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        className="dropdown-item"
+                        to="/IPL"
+                        onClick={() => props.changeSearch("")}
+                      >
+                        IPL
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        className="dropdown-item"
+                        to="/Jokes"
+                        onClick={() => props.changeSearch("")}
+                      >
+                        Jokes
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        className="dropdown-item"
+                        to="/Economics"
+                        onClick={() => props.changeSearch("")}
+                      >
+                        Economics
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        className="dropdown-item"
+                        to="/India"
+                        onClick={() => props.changeSearch("")}
+                      >
+                        India
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        className="dropdown-item"
+                        to="/International"
+                        onClick={() => props.changeSearch("")}
+                      >
+                        International
+                      </NavLink>
+                    </li>
+                  </ul>
+                </li>
+                <li className="nav-item dropdown">
+                  <NavLink
+                    className="nav-link dropdown-toggle text-light"
+                    to="/"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    Language
+                  </NavLink>
+                  <ul className="dropdown-menu">
+                    <li>
+                      <button
+                        className="dropdown-item"
+                        onClick={() => props.changeLanguage("en")}
+                      >
+                        English
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="dropdown-item"
+                        onClick={() => props.changeLanguage("hi")}
+                      >
+                        Hindi
+                      </button>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+              <form
+                className="d-flex"
+                role="search"
+                onSubmit={(e) => postSearch(e)}
+              >
+                <input
+                  className="form-control me-2"
+                  name="search"
+                  type="search"
+                  placeholder="Search"
+                  aria-label="Search"
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+                <button className="btn btn-outline-light" type="submit">
+                  Search
+                </button>
+              </form>
+            </div>
           </div>
-        </div>
-      </nav>
-    </div>
-  );
+        </nav>
+      </div>
+    );
 }
